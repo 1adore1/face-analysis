@@ -2,36 +2,13 @@ import cv2
 import torch
 
 def age_to_range(age):
-    if 0 <= age <= 5:
-        return '0-5'
-    elif 6 <= age <= 10:
-        return '6-10'
-    elif 11 <= age <= 15:
-        return '11-15'
-    elif 16 <= age <= 20:
-        return '16-20'
-    elif 21 <= age <= 25:
-        return '21-25'
-    elif 26 <= age <= 30:
-        return '26-30'
-    elif 31 <= age <= 35:
-        return '31-35'
-    elif 36 <= age <= 40:
-        return '36-40'
-    elif 41 <= age <= 45:
-        return '41-45'
-    elif 46 <= age <= 50:
-        return '46-50'
-    elif 51 <= age <= 55:
-        return '51-55'
-    elif 56 <= age <= 60:
-        return '56-60'
-    elif 61 <= age <= 65:
-        return '61-65'
-    elif age >= 65:
-        return '65+'
-    else:
-        return 'Unknown'
+    ranges = [(0, 5), (6, 10), (11, 15), (16, 20), (21, 25), 
+              (26, 30), (31, 35), (36, 40), (41, 45), (46, 50), 
+              (51, 55), (56, 60), (61, 65)]
+    for start, end in ranges:
+        if start <= age <= end:
+            return f'{start}-{end}'
+    return '65+' if age > 65 else 'Unknown'
 
 age_model = torch.load('models/age_model.pth', map_location=torch.device('cpu'))
 age_model.eval()
@@ -64,16 +41,16 @@ while True:
         face = torch.from_numpy(face).unsqueeze(0) / 255
         face = face.unsqueeze(0).float()
 
-        age = int(age_model(face))
-        age_range = age_to_range(age)
-        gender = genders[gender_model(face).argmax()]
-        emotion = emotions[emotion_model(face).argmax()]
+        with torch.no_grad():
+            age = int(age_model(face))
+            gender = genders[gender_model(face).argmax()]
+            emotion = emotions[emotion_model(face).argmax()]
 
-        cv2.putText(frame, f'{gender} {age_range}', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 4)
-        cv2.putText(frame, f'{gender} {age_range}', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-        
-        cv2.putText(frame, emotion, (x, y - 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 4)
-        cv2.putText(frame, emotion, (x, y - 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        age_range = age_to_range(age)
+        info_text = f'{gender} {age_range}, {emotion}'
+
+        cv2.putText(frame, info_text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 4)
+        cv2.putText(frame, info_text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
  
     cv2.imshow('video', frame)
 
