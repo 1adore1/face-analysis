@@ -42,7 +42,7 @@ gender_model.eval()
 emotion_model = torch.load('models/emotion_model.pth', map_location=torch.device('cpu'))
 emotion_model.eval()
 
-emotions = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
+emotions = ['Angry', 'Happy', 'Sad', 'Surprise', 'Neutral']
 genders = ['Male', 'Female']
 
 cap = cv2.VideoCapture(0)
