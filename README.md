@@ -1,5 +1,6 @@
-![](https://github.com/1adore1/face-analysis/blob/main/gif.gif)
 # Real-Time Face Analysis Application
+![](https://github.com/1adore1/face-analysis/blob/main/gif.gif)
+### Overview
 This application detects faces in real-time using a webcam and predicts gender, age range, and emotional state based on the face captured. It uses pre-trained models for age, gender, and emotion recognition and displays the results on the video stream.
 
 ### Features
