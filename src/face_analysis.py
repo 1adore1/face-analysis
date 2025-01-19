@@ -1,6 +1,5 @@
 import cv2
 import torch
-from torch import nn
 
 def age_to_range(age):
     ranges = [(0, 5), (6, 10), (11, 15), (16, 20), (21, 25), 
@@ -25,7 +24,7 @@ emotions = ['Angry', 'Happy', 'Sad', 'Surprise', 'Neutral']
 genders = ['Male', 'Female']
 
 cap = cv2.VideoCapture(0)
-faces_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+faces_cascade = cv2.CascadeClassifier('config/haarcascade_frontalface_default.xml')
 
 while True:
     _, frame = cap.read()
